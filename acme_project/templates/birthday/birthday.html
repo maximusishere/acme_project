@@ -1,5 +1,21 @@
+<!-- templates/birthday/birthday.html -->
 {% extends "base.html" %}
-
+{% load django_bootstrap5 %}
 {% block content %}
-
+  <form>
+    {{ form.as_p }}
+    <input type="submit" value="Отправить">
+  </form>
+  <!-- Если в запросе есть параметры... -->
+  {% with data=request.GET %}
+    <!-- ...поприветствуем пользователя: -->
+     {% if form.is_valid %}
+    <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
+    {% if birthday_countdown == 0 %}
+    С днем рождения!
+    {% else %}
+    Осталось дней до дня рождения: {{ birthday_countdown }}!
+      {% endif %}
+    {% endif %}
+  {% endwith %}
 {% endblock %}

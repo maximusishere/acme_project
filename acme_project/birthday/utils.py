@@ -3,7 +3,7 @@
 from datetime import date
 
 
-def calculate_birthday_countdown(birthday):
+def calculate_birthday_countdown(birthday) -> int:
     """
     Возвращает количество дней до следующего дня рождения.
 

@@ -2,25 +2,43 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
+  {% with data=form.instance %}
+<!-- Если в пути запроса содержится строка /edit/. -->
+  {% if 'edit/' in request.path %}
+    <!-- Вывести заголовок и номер записи. -->
+    <h2>Редактировать запись {{ data.first_name }}</h2>
+  {% elif 'delete/' in request.path %}
+    <h2>Удалить запись {{ data.first_name }}</h2>
+  {% else %}
+    <h2>Создать запись</h2>
+  {% endif %}
   <div class="card col-4">
     <div class="card-header">
-      Калькулятор ожидания дня рождения
+      Калькулятор дней до ДР
     </div>
     <div class="card-body">
-      <form>
-        {% bootstrap_form form %}
+      <form method='post'>
+        {% csrf_token %}
+        {% if not "delete/" in request.path %}
+          {% bootstrap_form form %}
+        {% else %}
+          <p>{{ data.first_name }} {{ data.last_name }}</p>
+          <p>{{data.birthday }}</p>
+        {% endif %}
         {% bootstrap_button button_type="submit" content="Отправить" %}
       </form>
     </div>
   </div>
-  {% with data=request.GET %}
+  
     <!-- ...поприветствуем пользователя: -->
      {% if form.is_valid %}
+     ID новой записи в БД: {{ form.instance.id }}
+     <hr>
     <h2>Привет, {{ data.first_name }} {{ data.last_name }}</h2>
     {% if birthday_countdown == 0 %}
-    С днем рождения!
+    <p>С днем рождения!</p>
     {% else %}
-    Осталось дней до дня рождения: {{ birthday_countdown }}!
+    <p>Осталось дней до дня рождения: {{ birthday_countdown }}!</p>
       {% endif %}
     {% endif %}
   {% endwith %}

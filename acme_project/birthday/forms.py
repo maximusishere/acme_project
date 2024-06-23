@@ -21,6 +21,8 @@ class BirthdayForm(forms.ModelForm):
         return first_name.split()[0]
 
     def clean(self):
+        # Чтобы валидация сработала в форме применим супер()клин()
+        super().clean()
         # Получаем имя и фамилию из очищенных полей формы.
         first_name = self.cleaned_data['first_name']
         last_name = self.cleaned_data['last_name']

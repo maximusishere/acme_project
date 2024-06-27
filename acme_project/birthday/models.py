@@ -2,6 +2,10 @@ from django.db import models
 from .validators import real_age
 # Импортируем функцию reverse() для получения ссылки на объект.
 from django.urls import reverse
+from django.contrib.auth import get_user_model
+
+# Да, именно так всегда и ссылаемся на модель пользователя!
+User = get_user_model()
 
 
 class Birthday(models.Model):
@@ -25,6 +29,12 @@ class Birthday(models.Model):
         verbose_name="Фото",
         blank=True,
         upload_to='birthday_images'
+        )
+    author = models.ForeignKey(
+        User,
+        verbose_name='Автор записи',
+        on_delete=models.CASCADE,
+        null=True
     )
 
     class Meta:
